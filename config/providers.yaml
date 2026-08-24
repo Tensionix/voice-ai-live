@@ -1,0 +1,26 @@
+schema_version: 1
+stt:
+  provider: openai
+  model: gpt-4o-transcribe-diarize
+  xai_model: grok-transcribe
+  gemini_model: gemini-3.5-flash
+  gigachat_model: GigaChat
+  gigachat_scope: GIGACHAT_API_PERS
+  gigachat_base_url: https://gigachat.devices.sberbank.ru/api/v1
+  gigachat_verify_ssl: false
+postprocess:
+  model: gpt-5.4-mini
+assemblyai:
+  enabled: false
+local:
+  model: large-v2
+  device: cpu
+  compute_type: null
+  batched: false
+  batch_size: 16
+diarization:
+  enabled: true
+vulkan:
+  engine: gigaam
+  model: gigaam-v3-e2e-rnnt
+  backend: auto

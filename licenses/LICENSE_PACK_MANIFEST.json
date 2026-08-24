@@ -1,0 +1,36 @@
+{
+  "schema": "audion.build_licenses.pack_manifest.v1",
+  "generated_utc": "2026-08-24T17:48:25Z",
+  "run_id": "20260824T174814Z_audion-voice-ai-live_3d2f303a",
+  "project_id": "audion-voice-ai-live",
+  "project_name": "Audion Voice AI Live",
+  "scan_root": "S:\\Release\\Audion Voice AI Live",
+  "output_dir": "S:\\Release\\Audion Voice AI Live\\licenses",
+  "files": [
+    {
+      "name": "THIRD_PARTY_NOTICES.txt",
+      "sha256": "f2b5ac290c611b091f471cb9f543a68d74df665b9675a49ee62a87a11fa5aee1",
+      "size": 1156721
+    },
+    {
+      "name": "SOURCE_CODE_AVAILABILITY.txt",
+      "sha256": "2c3530909a160e255a88c6618e8c68bdd353c95b1d444e4d494507dbd967ec87",
+      "size": 1630
+    },
+    {
+      "name": "COMPONENTS.json",
+      "sha256": "c2aac8c049587834a7a035a25febfdfe130664eb1ab1a5e78ec0ede14bb7f6c3",
+      "size": 94404
+    },
+    {
+      "name": "_records.json",
+      "sha256": "5cc12400fecc1b0b2190b3a54909e8ff7654444b731f1d1db75928095d3d2b03",
+      "size": 24332
+    },
+    {
+      "name": "LICENSE_SCAN_REPORT.md",
+      "sha256": "b8150155b9151a437512eafa72b264aec4449d3e37cd3103425dcb8355528da3",
+      "size": 3848
+    }
+  ]
+}
