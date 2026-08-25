@@ -8,7 +8,7 @@
 - [Direct download](https://audion.dev/get/voice-ai-live/2.1.1/Audion_Voice_AI_Live_v2.1.1_Full.zip) — unmetered, no rate limits
 - [Project page](https://audion.dev/downloads/voice-ai-live) — every version and how to install
 
-![The program window](docs/screenshot.png)
+<img src="docs/screenshot.png" alt="The program window" width="560">
 
 `SHA-256: 50c9146304d2dea61a52d58a866f8e882343d4a4bfba359d34366f81fb9662c7`
 
