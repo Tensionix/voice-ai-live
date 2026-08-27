@@ -1,14 +1,19 @@
 # Audion Voice AI
 
 <!-- audion:release -->
-[![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0b6db8?style=flat-square&logo=windows&logoColor=white)](https://audion.dev/downloads/voice-ai-live) [![Release](https://img.shields.io/github/v/release/Tensionix/voice-ai-live?style=flat-square&label=release&color=e08a63)](https://github.com/Tensionix/voice-ai-live/releases/latest) [![Downloads](https://img.shields.io/github/downloads/Tensionix/voice-ai-live/total?style=flat-square&label=downloads&color=5fd08a)](https://github.com/Tensionix/voice-ai-live/releases) [![License](https://img.shields.io/github/license/Tensionix/voice-ai-live?style=flat-square&color=5fd08a&logo=apache&logoColor=white&cacheSeconds=3600)](https://github.com/Tensionix/voice-ai-live/blob/main/LICENSE)
+<p align="center">
+  <a href="https://audion.dev/downloads/voice-ai-live"><img alt="Windows" src="https://img.shields.io/badge/Windows-10%20%7C%2011-0b6db8?style=flat-square&logo=windows&logoColor=white"></a>
+  <a href="https://github.com/Tensionix/voice-ai-live/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/Tensionix/voice-ai-live?style=flat-square&label=release&color=e08a63"></a>
+  <a href="https://github.com/Tensionix/voice-ai-live/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/Tensionix/voice-ai-live/total?style=flat-square&label=downloads&color=5fd08a"></a>
+  <a href="https://github.com/Tensionix/voice-ai-live/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Tensionix/voice-ai-live?style=flat-square&color=5fd08a&logo=apache&logoColor=white&cacheSeconds=3600"></a>
+</p>
 
 **Version 2.1.1** · 2026-08-25 · 626.3 MB
 
 - [Direct download](https://audion.dev/get/voice-ai-live/2.1.1/Audion_Voice_AI_Live_v2.1.1_Full.zip) — unmetered, no rate limits
 - [Project page](https://audion.dev/downloads/voice-ai-live) — every version and how to install
 
-<img src="docs/screenshot.png" alt="The program window" width="560">
+<p align="center"><img src="docs/screenshot.png" alt="The program window" width="560"></p>
 
 `SHA-256: 50c9146304d2dea61a52d58a866f8e882343d4a4bfba359d34366f81fb9662c7`
 
