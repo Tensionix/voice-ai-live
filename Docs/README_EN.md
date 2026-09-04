@@ -41,6 +41,15 @@ so the user downloads them under their own account where that is required.
 Until the models are installed, transcription will not start: the window opens,
 but there is nothing to recognise with.
 
+**On the first start the app offers to download what is missing.** The
+"Download models and engines" window lists the modules with their download
+size, for Live that is GigaAM and whisper.cpp with the Turbo model, about
+3.3 GB. "Download and install" installs them one after another; progress is
+shown on the Maintenance page, and once everything is in place every mode
+there is green. "Later" postpones the question until the next start, "Don't
+ask again" hides the window for good. Modules can still be installed by hand
+on the same page.
+
 ## Editions
 
 | edition | for what | engines |

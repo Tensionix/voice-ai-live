@@ -8,14 +8,14 @@
   <a href="https://github.com/Tensionix/voice-ai-live/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Tensionix/voice-ai-live?style=flat-square&color=5fd08a&logo=apache&logoColor=white&cacheSeconds=3600"></a>
 </p>
 
-**Version 2.2.0** · 2026-09-05 · 4.7 MB
+**Version 2.2.0** · 2026-09-05 · 643.8 MB
 
-- [Direct download](https://dl.audion.dev/voice-ai-live/2.2.0/Audion_Voice_AI_Live_v2.2.0.zip) — unmetered, no rate limits
+- [Direct download](https://audion.dev/get/voice-ai-live/2.2.0/Audion_Voice_AI_Live_v2.2.0_Full.zip) — unmetered, no rate limits
 - [Project page](https://audion.dev/downloads/voice-ai-live) — every version and how to install
 
 <p align="center"><img src="docs/screenshot.png" alt="The program window" width="560"></p>
 
-`SHA-256: 007cc91be5f466ad9fe55489b848db3e1c7b474052bf604499dc1210436ee84a`
+`SHA-256: d7bb31abd4215fd5af54ee45024d91d5c67729136f3fe98864cfc5cf9a8a5731`
 
 ---
 
@@ -34,6 +34,8 @@ An **Audion** tool, published by [Tensionix](https://github.com/Tensionix).
 - [What It Can Do](#what-it-can-do)
 - [Next](#next)
 - [Technical Reference](#technical-reference)
+  - [FFmpeg and the NVIDIA Driver](#ffmpeg-and-the-nvidia-driver)
+  - [Portability](#portability)
 
 Transcribing recordings, live dictation, cleaning up text, and exporting working
 notes. The light edition — for a laptop and everyday work.
@@ -61,6 +63,15 @@ so the user downloads them under their own account where that is required.
 
 Until the models are installed, transcription will not start: the window opens,
 but there is nothing to recognise with.
+
+**On the first start the app offers to download what is missing.** The
+"Download models and engines" window lists the modules with their download
+size, for Live that is GigaAM and whisper.cpp with the Turbo model, about
+3.3 GB. "Download and install" installs them one after another; progress is
+shown on the Maintenance page, and once everything is in place every mode
+there is green. "Later" postpones the question until the next start, "Don't
+ask again" hides the window for good. Modules can still be installed by hand
+on the same page.
 
 ## Editions
 

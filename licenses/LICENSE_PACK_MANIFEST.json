@@ -1,36 +1,36 @@
 {
   "schema": "audion.build_licenses.pack_manifest.v1",
-  "generated_utc": "2026-09-04T02:37:59Z",
-  "run_id": "20260904T023749Z_audion-voice-ai-live_c30688e7",
+  "generated_utc": "2026-09-04T21:51:53Z",
+  "run_id": "20260904T215107Z_audion-voice-ai-live_c407639e",
   "project_id": "audion-voice-ai-live",
   "project_name": "Audion Voice AI Live",
-  "scan_root": "S:\\Release\\Audion Voice AI Live",
-  "output_dir": "S:\\Release\\Audion Voice AI Live\\licenses",
+  "scan_root": "E:\\Releases Super New\\Audion Voice AI Live",
+  "output_dir": "E:\\Releases Super New\\Audion Voice AI Live\\licenses",
   "files": [
     {
       "name": "THIRD_PARTY_NOTICES.txt",
-      "sha256": "72439ce6b89078a232bf731e209877ff57020999c8c0e639738ebafa5d14aabd",
-      "size": 1032390
+      "sha256": "c596c1ec2484db35dac9805d844b3d8c05891872d5a58ddd7089dda4476720b6",
+      "size": 1156280
     },
     {
       "name": "SOURCE_CODE_AVAILABILITY.txt",
-      "sha256": "022065cfaef8bfd05293e1cc3e7eaaee42ae795cd7dc554a58a8588e7fc130f2",
-      "size": 1082
+      "sha256": "8826b9a49bbd4f0e10dc509c9ec32549b1b70d0a79d423e547dfd03cc1cb63d0",
+      "size": 1630
     },
     {
       "name": "COMPONENTS.json",
-      "sha256": "0d1c6908162bed6ad264bc8806fba6f0725d08650977834c4c57eadeb9107095",
-      "size": 52001
+      "sha256": "6ac72b93762ff315e4c481205a7be77cb99831bf57e41fa2567d6dd2a20dd0fd",
+      "size": 93110
     },
     {
       "name": "_records.json",
-      "sha256": "4fae4f6d3c3cc2ee5c868984fa781e59115ce528f460a5c48c91856b9ec4598d",
-      "size": 14059
+      "sha256": "7a18a6156fc26469736915d0075a4dd54bb541d91be15d7e91ce22467f8254e1",
+      "size": 24258
     },
     {
       "name": "LICENSE_SCAN_REPORT.md",
-      "sha256": "b2313b5f57d338377f71b5b3d1ed9b95b8921c440270a70805a1b79a491a6bdf",
-      "size": 2059
+      "sha256": "281825460416408d03c97f35dd5985d5d66dca1bd0dc1178aab9d47063e295e6",
+      "size": 3881
     }
   ]
 }

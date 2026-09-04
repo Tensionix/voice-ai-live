@@ -1,8 +1,8 @@
 schema_version: 1
 edition: live
-compute_mode: api
+compute_mode: vulkan
 language: auto
-ui_language: ru
+ui_language: en
 ui_theme: graphite
 context: ''
 transcription:
@@ -39,7 +39,7 @@ postprocessing:
   generate_action_items: false
   cleanup:
     enabled: false
-    model: gpt-5.4-mini
+    model: gpt-3.5-turbo
     prompt_id: builtin.cleanup.default
 pipeline:
   skip_existing: true
@@ -92,7 +92,7 @@ live:
     en_model: turbo
   cleanup:
     enabled: false
-    model: gpt-5.4-mini
+    model: gpt-3.5-turbo
     prompt_id: builtin.cleanup.default
     sentence_threshold: 12
   safety_timeout_minutes: 5

@@ -38,6 +38,20 @@ def compute_mode(settings: dict[str, Any]) -> str:
     return MODE_API
 
 
+def resolved_compute_mode(paths: ProjectPaths, settings: dict[str, Any]) -> str:
+    """Return the effective compute mode, including the local auto detector.
+
+    The orchestrator's GigaAM chunk limit depends on this helper; without it
+    every GigaAM file went to the model as one 600 s piece, which DirectML
+    rejects (error 80070057) while CUDA happened to tolerate it."""
+    raw = str(_get(settings, "compute_mode", default="")).strip().lower()
+    if raw == "auto":
+        from ..core.local_hardware import recommended_compute_mode
+
+        return recommended_compute_mode(paths, settings)
+    return compute_mode(settings)
+
+
 def assemblyai_enabled(settings: dict[str, Any]) -> bool:
     return bool(_get(settings, "assemblyai", "enabled", default=False))
 
