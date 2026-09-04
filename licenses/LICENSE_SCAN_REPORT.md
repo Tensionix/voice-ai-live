@@ -1,13 +1,13 @@
 # Audion Build Licenses Scan Report
 
 - Project: **Audion Voice AI Live** (`audion-voice-ai-live`)
-- Run: `20260901T044041Z_audion-voice-ai-live_3d575a37`
+- Run: `20260904T023749Z_audion-voice-ai-live_c30688e7`
 - Project root: `S:\Release\Audion Voice AI Live`
 - Scan root: `S:\Release\Audion Voice AI Live`
 - Output: `S:\Release\Audion Voice AI Live\licenses`
 - Status: **PASS**
-- Components: 52
-- Bundled: 52
+- Components: 31
+- Bundled: 31
 - Optional runtime: 0
 
 ## Issues
@@ -18,58 +18,37 @@ No issues detected.
 
 | Component | Change | Old | New |
 |---|---|---:|---:|
-| annotated-types | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.8.0 | 0.8.0 |
-| anyio | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 4.14.2 | 4.14.2 |
-| certifi | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2026.7.22 | 2026.7.22 |
-| cffi | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.1.1 | 2.1.1 |
+| anyio | `UNCHANGED` | 4.15.0 | 4.15.0 |
+| certifi | `UNCHANGED` | 2026.7.22 | 2026.7.22 |
+| cffi | `UNCHANGED` | 2.1.1 | 2.1.1 |
 | click | `UNCHANGED` | 8.5.0 | 8.5.0 |
-| colorama | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.4.6 | 0.4.6 |
-| FFmpeg | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 8.0.1-full_build-www.gyan.dev | 8.0.1-full_build-www.gyan.dev |
+| colorama | `UNCHANGED` | 0.4.6 | 0.4.6 |
+| FFmpeg | `UNCHANGED` | 8.0.1-full_build-www.gyan.dev | 8.0.1-full_build-www.gyan.dev |
 | filelock | `UNCHANGED` | 3.32.5 | 3.32.5 |
 | flatbuffers | `UNCHANGED` | 25.12.19 | 25.12.19 |
 | fsspec | `UNCHANGED` | 2026.7.0 | 2026.7.0 |
 | fzf | `UNCHANGED` | bundled | bundled |
-| h11 | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.16.0 | 0.16.0 |
+| h11 | `UNCHANGED` | 0.16.0 | 0.16.0 |
 | hf-xet | `UNCHANGED` | 1.6.0 | 1.6.0 |
-| httpcore | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 1.0.9 | 1.0.9 |
-| httpcore2 | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.12.0 | 2.12.0 |
-| httpx | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.28.1 | 0.28.1 |
-| httpx2 | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.12.0 | 2.12.0 |
-| huggingface_hub | `UNCHANGED` | 1.29.0 | 1.29.0 |
-| idna | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 3.19 | 3.19 |
-| iniconfig | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.3.0 | 2.3.0 |
-| jiter | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.16.0 | 0.16.0 |
+| httpcore | `UNCHANGED` | 1.0.9 | 1.0.9 |
+| httpx | `UNCHANGED` | 0.28.1 | 0.28.1 |
+| huggingface_hub | `UNCHANGED` | 1.30.0 | 1.30.0 |
+| idna | `UNCHANGED` | 3.19 | 3.19 |
 | mpmath | `UNCHANGED` | 1.3.0 | 1.3.0 |
 | numpy | `UNCHANGED` | 2.3.5 | 2.3.5 |
 | onnx-asr | `UNCHANGED` | 0.12.0 | 0.12.0 |
 | onnxruntime | `UNCHANGED` | 1.29.0 | 1.29.0 |
 | onnxruntime-directml | `UNCHANGED` | 1.24.4 | 1.24.4 |
-| openai | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 3.6.0 | 3.6.0 |
-| packaging | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 26.3 | 26.3 |
-| pip | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 26.2.1 | 26.2.1 |
-| pluggy | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 1.6.0 | 1.6.0 |
+| packaging | `UNCHANGED` | 26.3 | 26.3 |
 | protobuf | `UNCHANGED` | 7.36.1 | 7.36.1 |
-| pycparser | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 3.0 | 3.0 |
-| pydantic | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.13.5 | 2.13.5 |
-| pydantic_core | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.46.5 | 2.46.5 |
-| Pygments | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 2.21.0 | 2.21.0 |
-| PySide6 | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 6.11.2 | 6.11.2 |
-| PySide6_Addons | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 6.11.2 | 6.11.2 |
-| PySide6_Essentials | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 6.11.2 | 6.11.2 |
-| pytest | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 9.1.1 | 9.1.1 |
-| Python Embedded | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 3.12.x | 3.12.x |
-| python-slugify | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 8.0.4 | 8.0.4 |
-| PyYAML | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 6.0.3 | 6.0.3 |
-| shiboken6 | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 6.11.2 | 6.11.2 |
-| sniffio | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 1.3.1 | 1.3.1 |
-| sounddevice | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.5.5 | 0.5.5 |
+| pycparser | `UNCHANGED` | 3.0 | 3.0 |
+| Python Embedded | `UNCHANGED` | 3.12.x | 3.12.x |
+| PyYAML | `UNCHANGED` | 6.0.3 | 6.0.3 |
+| sounddevice | `UNCHANGED` | 0.5.5 | 0.5.5 |
 | sympy | `UNCHANGED` | 1.14.0 | 1.14.0 |
-| text-unidecode | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 1.3 | 1.3 |
 | tqdm | `UNCHANGED` | 4.70.0 | 4.70.0 |
-| truststore | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.10.4 | 0.10.4 |
-| typing_extensions | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 4.16.0 | 4.16.0 |
-| typing-inspection | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 0.4.4 | 0.4.4 |
-| websockets | `VERSION_OR_ARTIFACT_CHANGED_LICENSE_SAME` | 16.1 | 16.1 |
+| typing_extensions | `UNCHANGED` | 4.16.0 | 4.16.0 |
+| websockets | `UNCHANGED` | 16.1 | 16.1 |
 
 ## Scope
 
