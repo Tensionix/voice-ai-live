@@ -34,8 +34,8 @@ engine, not a different program.
 
 ## What Has to Be Installed Separately
 
-**Model weights are not part of the distribution** — together they come to nearly
-five gigabytes. The weights carry their own licences, separate from the program's,
+**Model weights are not part of the distribution** — together they come to about
+3.3 GB. The weights carry their own licences, separate from the program's,
 so the user downloads them under their own account where that is required.
 
 Until the models are installed, transcription will not start: the window opens,
