@@ -8,14 +8,14 @@
   <a href="https://github.com/Tensionix/voice-ai-live/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Tensionix/voice-ai-live?style=flat-square&color=5fd08a&logo=apache&logoColor=white&cacheSeconds=3600"></a>
 </p>
 
-**Version 2.3.0** · 2026-09-18 · 627.6 MB
+**Version 2.3.0** · 2026-09-18 · 4.7 MB
 
-- [Direct download](https://dl.audion.dev/voice-ai-live/2.3.0/Audion_Voice_AI_Live_v2.3.0_Full.zip) — unmetered, no rate limits
+- [Direct download](https://dl.audion.dev/voice-ai-live/2.3.0/Audion_Voice_AI_Live_v2.3.0.zip) — unmetered, no rate limits
 - [Project page](https://audion.dev/downloads/voice-ai-live) — every version and how to install
 
 <p align="center"><img src="docs/screenshot.png" alt="The program window" width="560"></p>
 
-`SHA-256: 0ae001674e70d00d3d2eca6b46eb8ecfbe7bf7b04ec93af0c144e10bcdcd9ecd`
+`SHA-256: b1a383e6da1e4628547efe07755280654ff59930f447c047a905e14572e32b20`
 
 ---
 
