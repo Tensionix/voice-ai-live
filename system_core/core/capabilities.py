@@ -230,6 +230,32 @@ def cuda_capability(paths: ProjectPaths) -> CapabilityStatus:
     return _cap("cuda", "cap_cuda", "cap_cuda_desc", checks)
 
 
+def speakers_capability(paths: ProjectPaths) -> CapabilityStatus:
+    from ..providers.diarization_sherpa import (
+        EMBEDDING_FILE,
+        SEGMENTATION_FILE,
+        sherpa_model_dir,
+    )
+
+    root = sherpa_model_dir(paths)
+    checks = (
+        CapabilityCheck("sherpa_onnx", _has("sherpa_onnx"), "cap_check_sherpa_onnx"),
+        CapabilityCheck(
+            "speakers_segmentation",
+            (root / SEGMENTATION_FILE).is_file(),
+            "cap_check_speakers_segmentation",
+            str(root / SEGMENTATION_FILE),
+        ),
+        CapabilityCheck(
+            "speakers_embedding",
+            (root / EMBEDDING_FILE).is_file(),
+            "cap_check_speakers_embedding",
+            str(root / EMBEDDING_FILE),
+        ),
+    )
+    return _cap("speakers", "cap_speakers", "cap_speakers_desc", checks, module_key="speakers")
+
+
 def list_capabilities(paths: ProjectPaths) -> list[CapabilityStatus]:
     capabilities = [
         openai_capability(paths),
@@ -237,6 +263,7 @@ def list_capabilities(paths: ProjectPaths) -> list[CapabilityStatus]:
         live_capability(paths),
         gigaam_capability(paths),
         vulkan_capability(paths),
+        speakers_capability(paths),
     ]
     if current_edition(paths) == EDITION_STUDIO:
         capabilities.extend([

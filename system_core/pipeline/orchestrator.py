@@ -241,8 +241,13 @@ def process_file(
     diar_provider = registry.get_diarization_provider(paths, settings)
     if diar_provider is not None and segments:
         log("Running diarization")
-        segments = diar_provider.diarize(wav_path, segments)
-        diarized = True
+        try:
+            segments = diar_provider.diarize(wav_path, segments)
+            diarized = True
+        except Exception as exc:
+            # The transcript is already done; speaker labels are an extra pass.
+            # Keep the text and say why the labels are missing.
+            log(f"WARN: speaker separation skipped: {exc}")
 
     doc = TranscriptDoc(
         source=SourceMeta(

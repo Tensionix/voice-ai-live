@@ -92,6 +92,10 @@ class PostprocessProvider(ABC):
         raise NotImplementedError("cleanup_text not implemented for this provider")
 
 
+class DiarizationUnavailable(RuntimeError):
+    """Speaker separation cannot run; the message says what to do."""
+
+
 class DiarizationProvider(ABC):
     name: str = "base"
 

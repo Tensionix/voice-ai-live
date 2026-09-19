@@ -214,13 +214,38 @@ def get_diarization_provider(
     """Return a SEPARATE diarization step only when the provider needs one.
 
     API mode diarizes inline (OpenAI diarize model / AssemblyAI utterances), so
-    no separate provider is returned there. Studio local modes use a separate
-    pyannote pass because the STT engine itself does not diarize.
+    no separate provider is returned there. Local file modes (GigaAM,
+    whisper.cpp, CUDA) get speaker labels from a second pass by timeline overlap:
+
+    * pyannote Community-1 when its stack and weights are installed (Studio,
+      HuggingFace key) - it finds the number of speakers by itself;
+    * otherwise sherpa-onnx, which needs no key but only runs with a speaker
+      count given by the user (it has no calibrated automatic mode).
     """
-    mode = compute_mode(settings)
-    if mode != MODE_CUDA or not bool(_get(settings, "diarization", "enabled", default=False)):
+    wants_diarization = bool(_get(settings, "diarization", "enabled", default=False)) or bool(
+        _get(settings, "transcription", "diarize", default=False)
+    )
+    if not wants_diarization:
         return None
 
-    from .diarization_pyannote import PyannoteDiarizationProvider
+    mode = resolved_compute_mode(paths, settings)
+    if mode not in {MODE_CUDA, MODE_VULKAN}:
+        return None
 
-    return PyannoteDiarizationProvider(paths)
+    try:
+        speakers = int(_get(settings, "diarization", "speakers", default=0) or 0)
+    except (TypeError, ValueError):
+        speakers = 0
+    engine = str(_get(settings, "diarization", "engine", default="auto") or "auto").strip().lower()
+
+    if engine != "sherpa":
+        try:
+            from .diarization_pyannote import PyannoteDiarizationProvider, pyannote_ready
+        except ImportError:  # Live ships no Community-1 provider
+            pyannote_ready = None  # type: ignore[assignment]
+        if pyannote_ready is not None and (engine == "pyannote" or pyannote_ready(paths)):
+            return PyannoteDiarizationProvider(paths, speakers=speakers)
+
+    from .diarization_sherpa import SherpaDiarizationProvider
+
+    return SherpaDiarizationProvider(paths, speakers=speakers)

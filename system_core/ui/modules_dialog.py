@@ -50,6 +50,7 @@ from .workers import InstallWorker, LocalHardwareWorker, MicrophoneCheckWorker
 
 _ICON_MUTED = "#9FB0C3"
 _ACTION_BUTTON_WIDTH = 208
+_KEY_FIELD_MIN_WIDTH = 600
 
 
 class ModulesPanel(QWidget):
@@ -133,6 +134,14 @@ class ModulesPanel(QWidget):
                 "elevenlabs_key_saved",
             )
         )
+        # Optional Hugging Face key: faster model downloads everywhere; in
+        # Studio it also unlocks the gated pyannote diarization weights.
+        root.addWidget(
+            self._build_key_row(
+                "huggingface", "hf_key_name", "hf_key_desc", "hf_key_prompt", "hf_key_saved"
+            )
+        )
+        self._apply_hf_key_tooltips()
         # Notion token — only needed for the optional Notion export connector.
         root.addWidget(self._build_notion_key_row())
 
@@ -438,6 +447,12 @@ class ModulesPanel(QWidget):
         setattr(self, f"_{provider}_key_btn", btn)
         return frame
 
+    def _apply_hf_key_tooltips(self) -> None:
+        """The caption stays short; the how-to lives in the tooltip."""
+        tip = self._tr.tr("hf_key_tip")
+        for suffix in ("name", "desc", "btn"):
+            getattr(self, f"_huggingface_key_{suffix}").setToolTip(tip)
+
     def _refresh_key_status(self, provider: str) -> None:
         status = getattr(self, f"_{provider}_key_status")
         key = read_api_key(self._paths, provider)
@@ -446,14 +461,25 @@ class ModulesPanel(QWidget):
         else:
             status.setText(self._tr.tr("api_key_missing"))
 
+    def _ask_key(self, title: str, prompt: str) -> tuple[str, bool]:
+        """Password-style key prompt whose field is wide enough to check a pasted key.
+
+        A HuggingFace token is 37 characters (hf_ + 34); the stock QInputDialog
+        field fits about half of that."""
+        dialog = QInputDialog(self)
+        dialog.setWindowTitle(title)
+        dialog.setLabelText(prompt)
+        dialog.setInputMode(QInputDialog.TextInput)
+        dialog.setTextEchoMode(QLineEdit.Password)
+        field = dialog.findChild(QLineEdit)
+        if field is not None:
+            field.setMinimumWidth(_KEY_FIELD_MIN_WIDTH)
+        dialog.resize(_KEY_FIELD_MIN_WIDTH + 40, dialog.sizeHint().height())
+        ok = dialog.exec() == QDialog.Accepted
+        return dialog.textValue(), ok
+
     def _enter_api_key(self, provider: str, name_key: str, prompt_key: str, saved_key: str) -> None:
-        text, ok = QInputDialog.getText(
-            self,
-            self._tr.tr(name_key),
-            self._tr.tr(prompt_key),
-            QLineEdit.Password,
-            "",
-        )
+        text, ok = self._ask_key(self._tr.tr(name_key), self._tr.tr(prompt_key))
         if not ok:
             return
         key = text.strip()
@@ -504,12 +530,8 @@ class ModulesPanel(QWidget):
             self._notion_key_status.setText(self._tr.tr("api_key_missing"))
 
     def _enter_notion_key(self) -> None:
-        text, ok = QInputDialog.getText(
-            self,
-            self._tr.tr("notion_key_name"),
-            self._tr.tr("conn_notion_key_prompt"),
-            QLineEdit.Password,
-            "",
+        text, ok = self._ask_key(
+            self._tr.tr("notion_key_name"), self._tr.tr("conn_notion_key_prompt")
         )
         if not ok:
             return
@@ -598,10 +620,12 @@ class ModulesPanel(QWidget):
             ("openai", "api_key_name", "api_key_desc"),
             ("xai", "xai_key_name", "xai_key_desc"),
             ("elevenlabs", "elevenlabs_key_name", "elevenlabs_key_desc"),
+            ("huggingface", "hf_key_name", "hf_key_desc"),
         ):
             getattr(self, f"_{provider}_key_name").setText(tr.tr(name_key))
             getattr(self, f"_{provider}_key_desc").setText(tr.tr(desc_key))
             getattr(self, f"_{provider}_key_btn").setText(tr.tr("api_key_enter"))
+        self._apply_hf_key_tooltips()
         self._notion_key_name.setText(tr.tr("notion_key_name"))
         self._notion_key_desc.setText(tr.tr("notion_key_desc"))
         self._notion_key_btn.setText(tr.tr("api_key_enter"))
@@ -629,7 +653,7 @@ class ModulesPanel(QWidget):
         self._refresh_install_profile()
         self._refresh_capabilities()
         self._refresh_module_recommendations()
-        for provider in ("openai", "xai", "elevenlabs"):
+        for provider in ("openai", "xai", "elevenlabs", "huggingface"):
             self._refresh_key_status(provider)
         self._refresh_notion_key_status()
         for mod in list_modules(self._paths):
@@ -674,6 +698,10 @@ class ModulesPanel(QWidget):
         script = mod.script_path(self._paths)
         if not script.exists():
             self._log(f"missing installer: {script}")
+            return
+        if mod.key == "gpu" and not read_api_key(self._paths, "huggingface"):
+            self._log("")
+            self._log(self._tr.tr("hf_key_required_for_gpu"))
             return
         self._set_busy(True)
         name = self._tr.tr(mod.name_key)

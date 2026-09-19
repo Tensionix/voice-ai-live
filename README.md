@@ -8,14 +8,14 @@
   <a href="https://github.com/Tensionix/voice-ai-live/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/Tensionix/voice-ai-live?style=flat-square&color=5fd08a&logo=apache&logoColor=white&cacheSeconds=3600"></a>
 </p>
 
-**Version 2.3.0** · 2026-09-18 · 4.7 MB
+**Version 2.3.0** · 2026-09-20 · 627.6 MB
 
-- [Direct download](https://dl.audion.dev/voice-ai-live/2.3.0/Audion_Voice_AI_Live_v2.3.0.zip) — unmetered, no rate limits
+- [Direct download](https://audion.dev/get/voice-ai-live/2.3.0/Audion_Voice_AI_Live_v2.3.0_Full.zip) — unmetered, no rate limits
 - [Project page](https://audion.dev/downloads/voice-ai-live) — every version and how to install
 
 <p align="center"><img src="docs/screenshot.png" alt="The program window" width="560"></p>
 
-`SHA-256: b1a383e6da1e4628547efe07755280654ff59930f447c047a905e14572e32b20`
+`SHA-256: 0ae001674e70d00d3d2eca6b46eb8ecfbe7bf7b04ec93af0c144e10bcdcd9ecd`
 
 ---
 
@@ -77,8 +77,8 @@ on the same page.
 
 | edition | for what | engines |
 |---|---|---|
-| **Live** | laptop, everyday work | cloud services, GigaAM, whisper.cpp |
-| Studio | workstation with an NVIDIA card | the same plus CUDA and speaker separation |
+| **Live** | laptop, everyday work | cloud services, GigaAM, whisper.cpp, speaker separation with a known speaker count |
+| Studio | workstation with an NVIDIA card | the same plus CUDA and automatic speaker separation |
 
 Live is the main version. Studio adds heavy local engines and speaker separation
 for machines with the hardware to run them.

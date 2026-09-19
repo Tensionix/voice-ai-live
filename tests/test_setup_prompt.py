@@ -17,6 +17,7 @@ from system_core.core.config import load_yaml_or_json
 from system_core.core.editions import current_edition
 from system_core.core.modules import (
     NOT_NEEDED,
+    OPTIONAL,
     RECOMMENDED,
     list_modules,
     missing_recommended_modules,
@@ -43,14 +44,25 @@ def test_recommended_modules_have_download_estimates():
             assert mod.download_mb > 0, mod.key
 
 
-def test_gpu_stack_recommended_only_for_studio_nvidia():
+def test_gpu_stack_is_opt_in_and_only_for_studio_nvidia():
     paths = get_project_paths()
     gpu = next((m for m in list_modules(paths) if m.key == "gpu"), None)
     if gpu is None:
         assert current_edition(paths) != "studio"
         return
     assert module_recommendation(gpu, paths, None) == NOT_NEEDED
-    assert module_recommendation(gpu, paths, _nvidia_profile()) == RECOMMENDED
+    # Gated pyannote weights need a personal Hugging Face account: never queued.
+    assert module_recommendation(gpu, paths, _nvidia_profile()) == OPTIONAL
+    assert "gpu" not in [m.key for m in missing_recommended_modules(paths, _nvidia_profile())]
+
+
+def test_keyless_speaker_separation_is_opt_in():
+    paths = get_project_paths()
+    speakers = next(m for m in list_modules(paths) if m.key == "speakers")
+    assert speakers.download_mb > 0
+    assert module_recommendation(speakers, paths, None) == OPTIONAL
+    assert module_recommendation(speakers, paths, _nvidia_profile()) == OPTIONAL
+    assert "speakers" not in [m.key for m in missing_recommended_modules(paths, _nvidia_profile())]
 
 
 def test_missing_recommended_excludes_installed_and_restore_rows():

@@ -6,7 +6,7 @@ ui_language: en
 ui_theme: graphite
 context: ''
 transcription:
-  diarize: true
+  diarize: false
 exports:
   json: true
   markdown: true

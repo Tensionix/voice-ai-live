@@ -114,6 +114,12 @@ def _vulkan_installed(paths: ProjectPaths) -> bool:
     )
 
 
+def _speakers_installed(paths: ProjectPaths) -> bool:
+    from ..providers.diarization_sherpa import sherpa_diarization_ready
+
+    return sherpa_diarization_ready(paths)
+
+
 @dataclass(frozen=True)
 class ModuleInfo:
     key: str            # stable id
@@ -145,6 +151,8 @@ NOT_NEEDED = "not_needed"
 # Modules every installation of the edition should have. Restore rows and the
 # Studio GPU stack depend on the detected hardware (see module_recommendation).
 _ALWAYS_RECOMMENDED = {"ffmpeg", "live", "wheel_cache", "gigaam", "vulkan", "whispercpp_models"}
+# "speakers" (keyless sherpa-onnx separation) stays OPTIONAL on purpose: it is coarse
+# (similar voices merge), so the first-run prompt must not install it for everyone.
 
 
 def module_recommendation(mod: ModuleInfo, paths: ProjectPaths, profile=None) -> str:
@@ -162,7 +170,9 @@ def module_recommendation(mod: ModuleInfo, paths: ProjectPaths, profile=None) ->
     if mod.key in _ALWAYS_RECOMMENDED:
         return RECOMMENDED
     if mod.key == "gpu":
-        return RECOMMENDED if edition == EDITION_STUDIO and has_nvidia else NOT_NEEDED
+        # Opt-in even on NVIDIA: the pyannote weights are gated behind a personal
+        # Hugging Face account, so the first-run prompt must not queue them.
+        return OPTIONAL if edition == EDITION_STUDIO and has_nvidia else NOT_NEEDED
     if mod.key == "restore_rtx":
         if mod.is_installed(paths):
             return NOT_NEEDED
@@ -192,10 +202,10 @@ def missing_recommended_modules(paths: ProjectPaths, profile=None) -> list[Modul
 _MODULES: list[ModuleInfo] = [
     ModuleInfo("ffmpeg", "Install-Portable-FFmpeg-BtbN.cmd",
                "mod_ffmpeg", "mod_ffmpeg_desc", _ffmpeg_installed, download_mb=150),
-    ModuleInfo("live", "Install-Live-Deps.cmd",
-               "mod_live", "mod_live_desc", _live_installed, download_mb=1),
     ModuleInfo("wheel_cache", "Rebuild-Wheel-Cache.cmd",
                "mod_wheel_cache", "mod_wheel_cache_desc", _wheel_cache_installed, download_mb=60),
+    ModuleInfo("live", "Install-Live-Deps.cmd",
+               "mod_live", "mod_live_desc", _live_installed, download_mb=1),
     # GigaAM v3 CTC + RNN-T ONNX payloads (~845 MB each) from Hugging Face.
     ModuleInfo("gigaam", "Install-GigaAM-ONNX.cmd",
                "mod_gigaam", "mod_gigaam_desc", _gigaam_installed, download_mb=1750),
@@ -204,6 +214,9 @@ _MODULES: list[ModuleInfo] = [
                "mod_vulkan", "mod_vulkan_desc", _vulkan_installed, download_mb=1560),
     ModuleInfo("gpu", "Install-Diarization-GPU.cmd",
                "mod_gpu", "mod_gpu_desc", _gpu_installed, (EDITION_STUDIO,), download_mb=3700),
+    # sherpa-onnx wheels (18 MB) + segmentation (7 MB) + speaker embedding (38 MB).
+    ModuleInfo("speakers", "Install-Diarization-Local.cmd",
+               "mod_speakers", "mod_speakers_desc", _speakers_installed, download_mb=65),
     ModuleInfo("restore_intel", "Restore-GigaAM-DirectML.cmd",
                "mod_restore_intel", "mod_restore_intel_desc",
                _gigaam_directml_installed, install_key="mod_restore", reinstall_key="mod_restore"),

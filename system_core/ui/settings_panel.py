@@ -217,6 +217,8 @@ class SettingsPanel(QWidget):
             file_left.addWidget(self._file_cuda_card)
         else:
             self._file_cuda_card = None
+        self._file_speakers_card = self._build_speakers_group()
+        file_left.addWidget(self._file_speakers_card)
         file_left.addWidget(self._build_pipeline_group())
         file_left.addWidget(self._build_postprocess_group())
         file_left.addWidget(self._build_cleanup_group())
@@ -396,6 +398,9 @@ class SettingsPanel(QWidget):
             self._file_vulkan_card.setVisible(mode == MODE_VULKAN)
         if self._file_cuda_card is not None:
             self._file_cuda_card.setVisible(mode == MODE_CUDA)
+        if hasattr(self, "_file_speakers_card"):
+            self._file_speakers_card.setVisible(mode != MODE_API)
+            self._refresh_speakers_hint()
 
     def _set_card_dimmed(self, card: Card, dimmed: bool) -> None:
         effect = card.graphicsEffect()
@@ -1001,6 +1006,63 @@ class SettingsPanel(QWidget):
         form.addRow(self._label("file_vulkan_backend"), self.cmb_file_vulkan_backend)
         return card
 
+    def _build_speakers_group(self) -> Card:
+        """Speaker separation for local file engines.
+
+        The card's checkbox is the same state as the 'Transcription +
+        diarization' fork of the API card, which is hidden in local modes."""
+        card = self._group("speakers_card", checkable=True)
+        layout = QVBoxLayout(card.body())
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+        form = self._form(None)
+        layout.addLayout(form)
+
+        self.spin_speakers = InlineSpinBox()
+        self.spin_speakers.setRange(0, 20)
+        self.spin_speakers.setSingleStep(1)
+        self.spin_speakers.setSpecialValueText(self._tr.tr("speakers_unknown"))
+        self.spin_speakers.setToolTip(self._tr.tr("speakers_count_tip"))
+        self.spin_speakers.valueChanged.connect(self._emit_changed)
+        self.spin_speakers.valueChanged.connect(lambda _v: self._refresh_speakers_hint())
+        form.addRow(self._label("speakers_count"), self.spin_speakers)
+
+        self.lbl_speakers_hint = QLabel("")
+        self.lbl_speakers_hint.setProperty("role", "muted")
+        self.lbl_speakers_hint.setWordWrap(True)
+        layout.addWidget(self.lbl_speakers_hint)
+
+        card.toggled.connect(self._on_speakers_card_toggled)
+        return card
+
+    def _on_speakers_card_toggled(self, on: bool) -> None:
+        button = self.btn_diar if on else self.btn_plain
+        if hasattr(self, "btn_diar") and not button.isChecked():
+            button.setChecked(True)
+        self._refresh_speakers_hint()
+        self._emit_changed()
+
+    def _refresh_speakers_hint(self) -> None:
+        if not hasattr(self, "lbl_speakers_hint"):
+            return
+        try:
+            from ..providers.diarization_pyannote import pyannote_ready
+
+            community = bool(pyannote_ready(self._paths))
+        except ImportError:
+            community = False
+        from ..providers.diarization_sherpa import sherpa_diarization_ready
+
+        if community:
+            key = "speakers_hint_community"
+        elif not sherpa_diarization_ready(self._paths):
+            key = "speakers_hint_not_installed"
+        elif self.spin_speakers.value() < 2:
+            key = "speakers_hint_need_count"
+        else:
+            key = "speakers_hint_ready"
+        self.lbl_speakers_hint.setText(self._tr.tr(key))
+
     def _build_live_overlay_group(self) -> Card:
         card = self._group("live_overlay")
         form = self._form(card.body())
@@ -1158,6 +1220,7 @@ class SettingsPanel(QWidget):
         self._fork_group.addButton(self.btn_plain, 0)
         self._fork_group.addButton(self.btn_diar, 1)
         self._fork_group.idToggled.connect(lambda _id, on: self._emit_changed() if on else None)
+        self._fork_group.idToggled.connect(self._sync_speakers_card_from_fork)
         fork.addWidget(self.btn_plain, 1)
         fork.addWidget(self.btn_diar, 1)
         outer.addLayout(fork)
@@ -1194,6 +1257,12 @@ class SettingsPanel(QWidget):
         self.txt_context.textChanged.connect(self._emit_changed)
         form.addRow(self._label("context"), self.txt_context)
         return card
+
+    def _sync_speakers_card_from_fork(self, _id: int, on: bool) -> None:
+        if on and hasattr(self, "_file_speakers_card"):
+            wanted = self.btn_diar.isChecked()
+            if self._file_speakers_card.isChecked() != wanted:
+                self._file_speakers_card.setChecked(wanted)
 
     def _build_postprocess_group(self) -> Card:
         card = self._group("generation_settings")
@@ -1559,8 +1628,17 @@ class SettingsPanel(QWidget):
         self._refresh_notion_key_label()
 
         # fork
-        diarize = bool(self._g("transcription", "diarize", default=False))
+        diarize = bool(self._g("transcription", "diarize", default=False)) or bool(
+            self._g("diarization", "enabled", default=False)
+        )
         (self.btn_diar if diarize else self.btn_plain).setChecked(True)
+        self._file_speakers_card.setChecked(diarize)
+        try:
+            speakers = int(self._g("diarization", "speakers", default=0) or 0)
+        except (TypeError, ValueError):
+            speakers = 0
+        self.spin_speakers.setValue(max(0, min(20, speakers)))
+        self._refresh_speakers_hint()
 
         # models (lists filled later by set_model_lists; seed with current value)
         file_provider = self._file_provider_from_settings()
@@ -1763,6 +1841,7 @@ class SettingsPanel(QWidget):
         s.setdefault("assemblyai", {})["enabled"] = file_provider == "assemblyai"
         # diarization step (local/pyannote) follows the fork in non-API modes
         s.setdefault("diarization", {})["enabled"] = self.btn_diar.isChecked()
+        s["diarization"]["speakers"] = int(self.spin_speakers.value())
 
         pp = s.setdefault("postprocessing", {})
         pp["generate_title"] = self.chk_title.isChecked()
@@ -1870,6 +1949,9 @@ class SettingsPanel(QWidget):
         self.cmb_notion_parent_type.setItemText(0, tr.tr("conn_parent_page"))
         self.cmb_notion_parent_type.setItemText(1, tr.tr("conn_parent_database"))
         self._refresh_notion_key_label()
+        self.spin_speakers.setSpecialValueText(tr.tr("speakers_unknown"))
+        self.spin_speakers.setToolTip(tr.tr("speakers_count_tip"))
+        self._refresh_speakers_hint()
         self.btn_plain.setText(tr.tr("btn_transcription"))
         self.btn_diar.setText(tr.tr("btn_transcription_diar"))
         self.btn_plain.setToolTip(tr.tr("btn_transcription_tip"))

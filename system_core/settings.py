@@ -39,7 +39,11 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "model": "gigaam-v3-e2e-rnnt",
         "backend": "directml",          # GigaAM: auto/cuda/directml/cpu
     },
-    "diarization": {"enabled": False},
+    "diarization": {
+        "enabled": False,
+        "engine": "auto",   # auto | pyannote | sherpa
+        "speakers": 0,      # 0 = unknown; sherpa-onnx (no HF key) needs 2-20
+    },
     "assemblyai": {"enabled": False},
     "exports": {
         "json": True,

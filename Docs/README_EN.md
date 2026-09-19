@@ -54,8 +54,8 @@ on the same page.
 
 | edition | for what | engines |
 |---|---|---|
-| **Live** | laptop, everyday work | cloud services, GigaAM, whisper.cpp |
-| Studio | workstation with an NVIDIA card | the same plus CUDA and speaker separation |
+| **Live** | laptop, everyday work | cloud services, GigaAM, whisper.cpp, speaker separation with a known speaker count |
+| Studio | workstation with an NVIDIA card | the same plus CUDA and automatic speaker separation |
 
 Live is the main version. Studio adds heavy local engines and speaker separation
 for machines with the hardware to run them.

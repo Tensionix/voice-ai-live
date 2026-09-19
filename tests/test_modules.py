@@ -21,8 +21,8 @@ from system_core.core.capabilities import STATE_READY, list_capabilities, vulkan
 
 def _expected_module_keys(paths):
     if current_edition(paths) == "studio":
-        return ["ffmpeg", "live", "wheel_cache", "gigaam", "vulkan", "gpu", "restore_intel", "restore_rtx"]
-    return ["ffmpeg", "live", "wheel_cache", "gigaam", "vulkan", "restore_intel", "restore_rtx"]
+        return ["ffmpeg", "wheel_cache", "live", "gigaam", "vulkan", "gpu", "speakers", "restore_intel", "restore_rtx"]
+    return ["ffmpeg", "wheel_cache", "live", "gigaam", "vulkan", "speakers", "restore_intel", "restore_rtx"]
 
 
 def test_catalog_shape():
@@ -60,9 +60,9 @@ def test_capability_matrix_shape():
     paths = get_project_paths()
     caps = list_capabilities(paths)
     if current_edition(paths) == "studio":
-        expected = ["openai", "ffmpeg", "live", "gigaam", "vulkan", "cuda"]
+        expected = ["openai", "ffmpeg", "live", "gigaam", "vulkan", "speakers", "cuda"]
     else:
-        expected = ["openai", "ffmpeg", "live", "gigaam", "vulkan"]
+        expected = ["openai", "ffmpeg", "live", "gigaam", "vulkan", "speakers"]
     assert [cap.key for cap in caps] == expected
     for cap in caps:
         assert cap.state in {"ready", "partial", "missing"}
@@ -118,9 +118,9 @@ if pytest.importorskip("PySide6", reason="GUI deps not installed"):
         # One row per module, each with a status label + install button.
         assert list(dlg._rows.keys()) == _expected_module_keys(paths)
         if current_edition(paths) == "studio":
-            expected_caps = {"openai", "ffmpeg", "live", "gigaam", "vulkan", "cuda"}
+            expected_caps = {"openai", "ffmpeg", "live", "gigaam", "vulkan", "speakers", "cuda"}
         else:
-            expected_caps = {"openai", "ffmpeg", "live", "gigaam", "vulkan"}
+            expected_caps = {"openai", "ffmpeg", "live", "gigaam", "vulkan", "speakers"}
         assert set(dlg._panel._cap_rows.keys()) == expected_caps
         assert dlg._panel.btn_mic_check.text() == tr.tr("mic_check_button")
         assert dlg._panel._mic_check_status.text() == tr.tr("mic_check_idle")

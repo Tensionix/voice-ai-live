@@ -19,7 +19,9 @@ local:
   batched: false
   batch_size: 16
 diarization:
-  enabled: true
+  enabled: false
+  engine: auto
+  speakers: 3
 vulkan:
   engine: gigaam
   model: gigaam-v3-e2e-rnnt

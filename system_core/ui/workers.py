@@ -11,18 +11,25 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Any
 
 from PySide6.QtCore import QThread, Signal
 
+from ..core.credentials import read_api_key
 from ..core.jobs import hidden_subprocess_creationflags, hidden_subprocess_startupinfo
 from ..core.local_hardware import LocalHardwareProfile
 from ..core.paths import ProjectPaths
 from ..pipeline.queue import run_queue
 from ..providers import model_catalog
 from .install_progress import InstallProgressTracker, is_pip_raw_progress_line
+
+
+_HF_ANON_WARNING = re.compile(
+    r"Warning: You are sending unauthenticated requests to the HF Hub\..*?downloads\."
+)
 
 
 class QueueWorker(QThread):
@@ -110,8 +117,16 @@ class InstallWorker(QThread):
             progress = tracker.update(line)
             if progress is not None:
                 self.progress.emit(progress)
-            if not is_pip_raw_progress_line(line):
+            # Anonymous Hugging Face downloads work; the library's hint about
+            # HF_TOKEN only confuses people. The optional key row covers it.
+            line = _HF_ANON_WARNING.sub("", line).rstrip()
+            if line and not is_pip_raw_progress_line(line):
                 self.log.emit(line)
+
+        extra_env = {"AUDION_NO_PAUSE": "1"}
+        hf_token = read_api_key(self._paths, "huggingface")
+        if hf_token:
+            extra_env["HF_TOKEN"] = hf_token
 
         try:
             # Keep the script path as its own argument: a single "set ... &&
@@ -125,7 +140,7 @@ class InstallWorker(QThread):
                 log=_log,
                 cancel=lambda: self._cancel or self.isInterruptionRequested(),
                 check=False,
-                extra_env={"AUDION_NO_PAUSE": "1"},
+                extra_env=extra_env,
             )
             self.done.emit(result.exit_code)
         except Exception as exc:

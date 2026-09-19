@@ -26,19 +26,20 @@ echo.
 echo Recommended staged install order:
 echo.
 
-set "SCRIPT_COUNT=12"
+set "SCRIPT_COUNT=13"
 set "SCRIPT_01=init_folders.cmd"
 set "SCRIPT_02=Build_Portable_Env.cmd"
 set "SCRIPT_03=launcher-tools-update_fzf.cmd"
 set "SCRIPT_04=Install-Portable-FFmpeg-BtbN.cmd"
 set "SCRIPT_05=Install-Portable-FFmpeg-Gyan.cmd"
-set "SCRIPT_06=Install-Live-Deps.cmd"
-set "SCRIPT_07=Rebuild-Wheel-Cache.cmd"
+set "SCRIPT_06=Rebuild-Wheel-Cache.cmd"
+set "SCRIPT_07=Install-Live-Deps.cmd"
 set "SCRIPT_08=Install-GigaAM-ONNX.cmd"
 set "SCRIPT_09=Install-Live-Vulkan.cmd"
 set "SCRIPT_10=Restore-GigaAM-DirectML.cmd"
 set "SCRIPT_11=Restore-GigaAM-CUDA.cmd"
 set "SCRIPT_12=verify_portable_env.cmd"
+set "SCRIPT_13=Install-Diarization-Local.cmd"
 
 if exist "%FZF_EXE%" goto FZF_MENU
 goto FALLBACK_MENU
@@ -49,13 +50,14 @@ goto FALLBACK_MENU
 >>"%MENU_FILE%" echo [03] FZF RUNNER TOOL                     ^| step_03          ^| install/update system_core\fzf.exe
 >>"%MENU_FILE%" echo [04] FFMPEG BTBN AUTO-FALLBACK           ^| step_04          ^| Driver-aware Stable branch; Gyan provider fallback
 >>"%MENU_FILE%" echo [05] FFMPEG GYAN STABLE                  ^| step_05          ^| optional explicit Gyan provider
->>"%MENU_FILE%" echo [06] LIVE DEPS                           ^| step_06          ^| Live mic/Realtime deps
->>"%MENU_FILE%" echo [07] WHEEL CACHE                         ^| step_07          ^| GigaAM common + DirectML/CPU wheels
+>>"%MENU_FILE%" echo [06] WHEEL CACHE                         ^| step_06          ^| GigaAM common + DirectML/CPU wheels
+>>"%MENU_FILE%" echo [07] LIVE DEPS                           ^| step_07          ^| Live mic/Realtime deps
 >>"%MENU_FILE%" echo [08] GIGAAM ONNX                         ^| step_08          ^| onnx-asr + provider + payloads
 >>"%MENU_FILE%" echo [09] WHISPER.CPP CPU FALLBACK            ^| step_09          ^| full CPU pack, server, payloads and Turbo
 >>"%MENU_FILE%" echo [10] RESTORE INTEL/AMD GPU               ^| step_10          ^| restore GigaAM ONNX provider to DirectML
 >>"%MENU_FILE%" echo [11] RESTORE RTX CUDA                    ^| step_11          ^| restore GigaAM ONNX provider to CUDA
 >>"%MENU_FILE%" echo [12] VERIFY                              ^| step_12          ^| verify final portable environment
+>>"%MENU_FILE%" echo [13] SPEAKER SEPARATION (NO KEY)         ^| step_13          ^| sherpa-onnx + 2 ONNX models, CPU, needs a speaker count
 >>"%MENU_FILE%" echo.
 >>"%MENU_FILE%" echo [70] CLEAN INSTALL CACHE                 ^| cleanup          ^| clean install\download
 >>"%MENU_FILE%" echo [71] VERIFY                              ^| verify           ^| verify portable environment
@@ -95,6 +97,7 @@ if /I "%RAW%"=="step_09" set "RAW=09"
 if /I "%RAW%"=="step_10" set "RAW=10"
 if /I "%RAW%"=="step_11" set "RAW=11"
 if /I "%RAW%"=="step_12" set "RAW=12"
+if /I "%RAW%"=="step_13" set "RAW=13"
 goto ROUTE_CHOICE
 
 :FALLBACK_MENU
@@ -103,13 +106,14 @@ echo [02] portable Python runtime + base GUI/API deps
 echo [03] install/update FZF runner
 echo [04] FFmpeg Stable ^(driver-aware branch; Gyan provider fallback^)
 echo [05] FFmpeg Gyan Stable ^(optional explicit provider^)
-echo [06] Live mic/Realtime deps
-echo [07] Download/Rebuild wheel cache ^(GigaAM common + DirectML/CPU^)
+echo [06] Download/Rebuild wheel cache ^(GigaAM common + DirectML/CPU^)
+echo [07] Live mic/Realtime deps
 echo [08] GigaAM ONNX pack ^(onnx-asr + provider + payloads^)
 echo [09] whisper.cpp CPU fallback pack ^(server + payloads + Turbo^)
 echo [10] restore Audion Voice AI for Intel/AMD GPU ^(DirectML^)
 echo [11] restore Audion Voice AI for RTX CUDA ^(GigaAM ONNX CUDA^)
 echo [12] verify final portable environment
+echo [13] speaker separation without a HuggingFace key ^(sherpa-onnx, CPU^)
 echo.
 echo Maintenance:
 echo.
@@ -154,6 +158,7 @@ if /I "%RAW%"=="step_09" goto STEP_09
 if /I "%RAW%"=="step_10" goto STEP_10
 if /I "%RAW%"=="step_11" goto STEP_11
 if /I "%RAW%"=="step_12" goto STEP_12
+if /I "%RAW%"=="step_13" goto STEP_13
 if /I "%RAW%"=="update_fzf" goto UPDATE_FZF
 if /I "%RAW%"=="cleanup" goto STEP_70
 if /I "%RAW%"=="70" goto CLEANUP
@@ -238,11 +243,11 @@ call "%BASE_DIR%\install\Install-Portable-FFmpeg-Gyan.cmd"
 goto MAIN
 
 :STEP_06
-call "%BASE_DIR%\install\Install-Live-Deps.cmd"
+call "%BASE_DIR%\install\Rebuild-Wheel-Cache.cmd"
 goto MAIN
 
 :STEP_07
-call "%BASE_DIR%\install\Rebuild-Wheel-Cache.cmd"
+call "%BASE_DIR%\install\Install-Live-Deps.cmd"
 goto MAIN
 
 :STEP_08
@@ -259,6 +264,10 @@ goto MAIN
 
 :STEP_11
 call "%BASE_DIR%\install\Restore-GigaAM-CUDA.cmd"
+goto MAIN
+
+:STEP_13
+call "%BASE_DIR%\install\Install-Diarization-Local.cmd"
 goto MAIN
 
 :STEP_12

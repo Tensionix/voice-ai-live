@@ -459,6 +459,12 @@ strings:
   cap_whisper_desc:     {ru: "Локальный faster-whisper/CPU слой.", en: "Local faster-whisper/CPU layer."}
   cap_gigaam:           {ru: "GigaAM ONNX",                 en: "GigaAM ONNX"}
   cap_gigaam_desc:      {ru: "Русская локальная модель через onnx-asr и ONNX Runtime.", en: "Russian local model through onnx-asr and ONNX Runtime."}
+  cap_speakers:         {ru: "Разделение по говорящим",     en: "Speaker separation"}
+  cap_speakers_desc:    {ru: "Без ключа HuggingFace, на процессоре, грубо: работает при указанном числе говорящих, похожие голоса может слить.",
+                         en: "No HuggingFace key, on the CPU, coarse: works with a given speaker count and may merge similar voices."}
+  cap_check_sherpa_onnx: {ru: "sherpa-onnx",                en: "sherpa-onnx"}
+  cap_check_speakers_segmentation: {ru: "Модель сегментации", en: "Segmentation model"}
+  cap_check_speakers_embedding: {ru: "Модель голосовых отпечатков", en: "Speaker embedding model"}
   cap_vulkan:           {ru: "whisper.cpp",                 en: "whisper.cpp"}
   cap_vulkan_desc:      {ru: "Портативный whisper.cpp: Live использует CPU fallback, Studio может использовать CUDA/cuBLAS.", en: "Portable whisper.cpp: Live uses CPU fallback; Studio can use CUDA/cuBLAS."}
   cap_cuda:             {ru: "CUDA",                        en: "CUDA"}
@@ -498,6 +504,17 @@ strings:
   api_key_missing:      {ru: "Не задан",                    en: "Not set"}
   api_key_saved:        {ru: "Ключ OpenAI сохранён в config/api_key_openai.txt",
                          en: "OpenAI key saved to config/api_key_openai.txt"}
+  hf_key_name:          {ru: "Ключ HuggingFace (по желанию)", en: "HuggingFace key (optional)"}
+  hf_key_desc:          {ru: "Ускоряет закачку моделей; в Studio открывает разделение по говорящим. Без ключа всё работает.",
+                         en: "Speeds up model downloads; in Studio it unlocks speaker separation. Everything works without it."}
+  hf_key_prompt:        {ru: "Вставьте токен HuggingFace (hf_…):",
+                         en: "Paste the HuggingFace token (hf_…):"}
+  hf_key_saved:         {ru: "Ключ HuggingFace сохранён в config/api_key_huggingface.txt",
+                         en: "HuggingFace key saved to config/api_key_huggingface.txt"}
+  hf_key_tip:           {ru: "Необязательный ключ. Без него HuggingFace отдаёт модели анонимно, но медленнее. Получить за минуту: huggingface.co → войти или зарегистрироваться → аватар → Settings → Access Tokens → New token, тип Read → скопировать и вставить сюда. Для разделения по говорящим в Studio тем же аккаунтом откройте страницу pyannote/speaker-diarization-community-1 и примите условия модели. Ключ хранится только в config/api_key_huggingface.txt.",
+                         en: "Optional key. Without it HuggingFace serves the models anonymously, only slower. Get one in a minute: huggingface.co → sign in or sign up → avatar → Settings → Access Tokens → New token, type Read → copy and paste it here. For speaker separation in Studio, open the pyannote/speaker-diarization-community-1 page with the same account and accept the model terms. The key is stored only in config/api_key_huggingface.txt."}
+  hf_key_required_for_gpu: {ru: "Разделение по говорящим не установлено: сначала введите ключ HuggingFace ниже на этой странице. Веса pyannote выдаются только аккаунту, принявшему условия модели; подсказка у строки ключа объясняет, как это сделать.",
+                            en: "Speaker separation was not installed: enter the HuggingFace key lower on this page first. The pyannote weights are only served to an account that accepted the model terms; the tooltip on the key row explains how."}
   xai_key_name:         {ru: "Ключ API xAI",               en: "xAI API key"}
   xai_key_desc:         {ru: "Для xAI Grok STT в файлах и Live. Сохраняется в config/api_key_xai.txt.",
                          en: "For xAI Grok STT in Files and Live. Saved to config/api_key_xai.txt."}
@@ -589,6 +606,9 @@ strings:
                          en: "Restore Audion Voice AI for RTX CUDA"}
   mod_restore_rtx_desc: {ru: "Переустанавливает GigaAM ONNX provider в CUDA-capable onnxruntime-gpu. Диаризация torch/pyannote устанавливается отдельно и необязательна.",
                          en: "Reinstalls the GigaAM ONNX provider as CUDA-capable onnxruntime-gpu. Torch/pyannote diarization is separate and optional."}
+  mod_speakers:         {ru: "Разделение по говорящим (без ключа)", en: "Speaker separation (no key)"}
+  mod_speakers_desc:    {ru: "Грубое разделение без ключа HuggingFace, на процессоре. Нужно число говорящих; похожие голоса могут слиться.",
+                         en: "Coarse separation without a HuggingFace key, on the CPU. Needs the speaker count; similar voices may merge."}
   mod_vulkan:           {ru: "whisper.cpp pack",            en: "whisper.cpp pack"}
   mod_vulkan_desc:      {ru: "Локальный whisper.cpp: Live CPU fallback, Studio CUDA/cuBLAS GPU pack.",
                          en: "Local whisper.cpp: Live CPU fallback, Studio CUDA/cuBLAS GPU pack."}
@@ -599,8 +619,8 @@ strings:
   mod_whispercpp_models_desc: {ru: "Скачивает ggml-large-v2.bin — основную русскую модель файлового распознавания Studio. Turbo остаётся дополнительным быстрым профилем.",
                          en: "Downloads ggml-large-v2.bin, Studio's primary Russian file-transcription model. Turbo remains an optional fast profile."}
   mod_gpu:              {ru: "Диаризация на GPU",           en: "GPU diarization"}
-  mod_gpu_desc:         {ru: "torch (CUDA) + pyannote для разметки спикеров. Нужна видеокарта NVIDIA.",
-                         en: "torch (CUDA) + pyannote for speaker labels. Requires an NVIDIA GPU."}
+  mod_gpu_desc:         {ru: "torch (CUDA) + pyannote для разметки спикеров. Нужны видеокарта NVIDIA и ключ HuggingFace.",
+                         en: "torch (CUDA) + pyannote for speaker labels. Requires an NVIDIA GPU and a HuggingFace key."}
 
   # --- first-run download prompt ---
   setup_prompt_title:   {ru: "Докачать модели и движки",     en: "Download models and engines"}
@@ -624,6 +644,21 @@ strings:
                             en: "Installation finished: {ok} of {total} done. All modes are ready."}
   setup_prompt_queue_partial: {ru: "Установка завершена: готово {ok} из {total}. Неготовые режимы отмечены на странице «Обслуживание»; повторите установку оттуда.",
                                en: "Installation finished: {ok} of {total} done. Modes that are still not ready are marked on the Maintenance page; retry from there."}
+
+  # --- speaker separation (local file modes) ---
+  speakers_card:        {ru: "Разделение по говорящим",     en: "Speaker separation"}
+  speakers_count:       {ru: "Говорящих",                   en: "Speakers"}
+  speakers_unknown:     {ru: "не знаю",                     en: "unknown"}
+  speakers_count_tip:   {ru: "Сколько человек говорит в записи. Без ключа HuggingFace разделение работает только с числом от 2 до 20: у этого движка нет надёжного автоопределения, и угадывать мы не стали. Оно грубое: на проверочной записи трёх человек в одной комнате двоих с похожими голосами он слил в одного. С ключом (Studio, Community-1) число можно не указывать: модель определит его сама и разделяет заметно точнее.",
+                         en: "How many people speak in the recording. Without a HuggingFace key separation only works with a number from 2 to 20: this engine has no reliable automatic mode, and we chose not to guess. It is coarse: on a test recording of three people in one room it merged two similar voices into one. With a key (Studio, Community-1) the number is optional: the model finds it by itself and separates noticeably better."}
+  speakers_hint_community: {ru: "Работает pyannote Community-1: число говорящих можно не указывать.",
+                            en: "pyannote Community-1 is in use: the number of speakers is optional."}
+  speakers_hint_not_installed: {ru: "Модуль не установлен. Поставьте «Разделение по говорящим (без ключа)» на странице «Обслуживание».",
+                                en: "The module is not installed. Install \"Speaker separation (no key)\" on the Maintenance page."}
+  speakers_hint_need_count: {ru: "Укажите число говорящих от 2 до 20, иначе разделение не запустится, а расшифровка сохранится без меток.",
+                             en: "Set the number of speakers from 2 to 20, otherwise separation will not run and the transcript is saved without labels."}
+  speakers_hint_ready:  {ru: "Готово. Разделение без ключа грубое: непохожие голоса отделит, похожие может слить в одного. Точное разделение даёт Community-1 в Studio.",
+                         en: "Ready. Separation without a key is coarse: it splits unlike voices and may merge similar ones. Community-1 in Studio gives an accurate split."}
 
   # --- subtitles ---
   subtitles:            {ru: "Субтитры",                    en: "Subtitles"}

@@ -75,13 +75,14 @@ Recommended order:
 1. Start the app. On the first start the "Download models and engines" window installs everything recommended with one button; the remaining steps are for manual repair or checks.
 2. `builder_main.cmd` is only needed when the app is not built yet: it checks the folder structure and installs the Python runtime.
 3. FFmpeg ships with the distribution. `Reinstall` on the `Maintenance` page is only needed after an NVIDIA driver change, because the build is picked to match the driver.
-4. Live dependencies (microphone, streaming dictation) are installed by the GUI itself at start-up from `wheelhouse\live`, without Internet access. The manual row remains available for repair.
-5. `Dependency wheel cache` (`wheelhouse`) ships with the distribution and shows as `Installed`. `Reinstall` is only needed if the folder was deleted: it downloads the GigaAM/ONNX Runtime wheels again.
+4. `Dependency wheel cache` (`wheelhouse`) ships with the distribution and shows as `Installed`. `Reinstall` is only needed if the folder was deleted: it downloads the GigaAM/ONNX Runtime wheels again.
+5. Live dependencies (microphone, streaming dictation) are installed by the GUI itself at start-up from `wheelhouse\live`, without Internet access. The manual row remains available for repair.
 6. Click `Check` in the `Microphone check` card: it tests the Windows default recording device, then a separate communications default, including native 44.1/48 kHz modes. Audio is not saved.
 7. `GigaAM ONNX pack`: onnx-asr, the ONNX Runtime provider, the GigaAM v3 models and Silero VAD for splitting long recordings.
 8. `whisper.cpp pack`: Live installs the CPU build, Studio the CUDA/cuBLAS build; the Turbo model comes with it.
-9. Studio: `whisper.cpp Large V2 model` is the primary file model in CUDA mode. `GPU diarization` (torch + pyannote) is optional and NVIDIA only.
-10. Run base verify/smoke checks.
+9. Studio: `whisper.cpp Large V2 model` is the primary file model in CUDA mode. `GPU diarization` (torch + pyannote Community-1) is optional, NVIDIA only and needs a HuggingFace key; the first-start window never installs it.
+10. `Speaker separation (no key)`: sherpa-onnx and two models, about 65 MB, optional; the first-start window does not install it because the separation is coarse.
+11. Run base verify/smoke checks.
 
 The Maintenance tab shows the detected GPU, recommended profile, progress, speed, and ETA. Installer output is routed automatically to the left `Activity log`; there is no empty terminal area on the right. Rows are marked `Recommended`, `Optional`, or `Not needed`; non-recommended actions remain legible and available.
 
@@ -97,6 +98,8 @@ config/
 ```
 
 Reset App does not delete these files. Cleanup must also protect working configs.
+
+The **HuggingFace key** is separate and optional (`config\api_key_huggingface.txt`, the "HuggingFace key" row on the `Maintenance` page). Without it the models download anonymously, only slower; with a key HuggingFace lifts the rate limit. Getting one takes a minute: huggingface.co → sign in or sign up → avatar → Settings → Access Tokens → New token, type Read → copy and paste it into the key row. In Studio the same key unlocks speaker separation: with the same account open the `pyannote/speaker-diarization-community-1` page and accept the model terms.
 
 ## 4. Main Window
 
@@ -184,7 +187,7 @@ Local models:
 
 Install the required runtimes/payloads and models from the `Maintenance` page before using this mode (or accept the first-start window). The GigaAM/ONNX Runtime wheels ship in the distribution's `wheelhouse`: `GigaAM ONNX pack` installs `onnx-asr` and the ONNX Runtime provider from them, preloads `gigaam-v3-e2e-ctc`/`gigaam-v3-e2e-rnnt` into `models\huggingface` and fetches Silero VAD. On Windows, auto uses DirectML as the lightweight universal backend; Studio uses CUDA on NVIDIA.
 
-In Live, GigaAM diarization should remain a lightweight local option through ONNX Runtime and an available backend. The full CUDA/pyannote path belongs to Studio.
+**Speaker separation** in local modes is switched on by the `Speaker separation` card on the `Files` tab (the same state as the `Transcription + diarization` fork in API mode). The path without a HuggingFace key is installed by the `Speaker separation (no key)` module: sherpa-onnx and two ONNX models, about 65 MB, runs on the CPU and takes roughly a fifth to a half of the recording's length. This engine needs the number of speakers in the `Speakers` field (2 to 20). It has no automatic mode on purpose: sherpa-onnx has no calibrated threshold, on one and the same recording it finds anywhere from one to seven people depending on the setting, and we chose not to tune the app to a single recording. Without a number separation does not run, the transcript is saved without labels, and the journal keeps a warning. Separation without a key is coarse: it splits unlike voices and may merge similar ones. On a test recording of three people in one room it agreed with Community-1 on three quarters of the segments and took two similar voices for one; Community-1 found all three on the same recording with no hint.
 
 ### 9.1. Local Backend Installation
 
@@ -206,7 +209,7 @@ The `CUDA` card includes a Faster-Whisper profile switch:
 Typical flow:
 
 1. Install `whisper.cpp pack` (CUDA/cuBLAS) and `whisper.cpp Large V2 model`; the first-start window does this by itself.
-2. Install `GPU diarization` (CUDA/pyannote) when speaker labels are needed.
+2. When speaker labels are needed: enter the HuggingFace key on the `Maintenance` page, accept the terms of `pyannote/speaker-diarization-community-1`, and install `GPU diarization`. Without a key the install does not start and says why.
 3. Run verify.
 4. Turbo remains the fast profile for comparisons against large-v2.
 5. Choose the Studio GPU engine: GigaAM CUDA, whisper.cpp cuBLAS, or faster-whisper CUDA.
@@ -357,7 +360,7 @@ The GUI module catalog and `builder_main.cmd` are synchronized. The target profi
 - For Local Models, check the model and runtime.
 - For CUDA, check the NVIDIA driver and that the CUDA/cuBLAS `whisper.cpp pack` with the Large V2 model is installed; PyTorch is only needed for diarization.
 - Long GigaAM recordings are cut into pieces of up to 25 seconds automatically. If a piece still fails with a DirectML error, update the GPU driver or switch the backend to CPU.
-- Studio on a machine without NVIDIA: turn off `Transcription + diarization`, otherwise the pipeline stops at the missing pyannote after transcription.
+- If speaker separation fails (pyannote missing, no HuggingFace key, model terms not accepted), the transcript is still saved and the journal shows `WARN: speaker separation skipped` with the reason and a hint.
 - If models were installed by hand and the `Mode readiness` matrix is not green, open `Maintenance`: the row marked `Not installed` shows what is missing.
 - Use Reset App if the issue looks like broken UI configuration.
 
